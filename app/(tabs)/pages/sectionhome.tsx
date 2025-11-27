@@ -118,7 +118,7 @@ const SectionOne = () => {
   const onPressExplore = (option) => {
     switch (option) {
       case 'Activities':
-        router.push('/activities'); // your activities page
+        router.push('/(tabs)/pages/activities'); // your activities page  //
         break;
       case 'Self Check':
         router.push('/self-check'); // your self evaluation page
