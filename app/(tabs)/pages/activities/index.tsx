@@ -1,241 +1,31 @@
-// import React, { useState } from 'react';
-// import { ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
-
-// // Sample CBT Activities
-// const CBT_ACTIVITIES = [
-//   '1-Minute Breathing',
-//   'Reframe One Thought',
-//   'Tiny Gratitude',
-//   'Say One Kind Thing to Yourself',
-//   'Body Scan Mindfulness',
-//   'Grounding Exercise',
-//   'Positive Affirmation',
-//   'Highlight a Success of the Day',
-// ];
-
-// export default function ActivitiesPage() {
-//   // Store activity status: 'notStarted' | 'inProgress' | 'completed'
-//   const [activityStatus, setActivityStatus] = useState(
-//     CBT_ACTIVITIES.reduce((acc, activity) => {
-//       acc[activity] = 'notStarted';
-//       return acc;
-//     }, {})
-//   );
-
-//   const handleStartActivity = (activity) => {
-//     // Set to inProgress if not started
-//     if (activityStatus[activity] === 'notStarted') {
-//       setActivityStatus({ ...activityStatus, [activity]: 'inProgress' });
-//     }
-//   };
-
-//   const handleCompleteActivity = (activity) => {
-//     setActivityStatus({ ...activityStatus, [activity]: 'completed' });
-//   };
-
-//   return (
-//     <ScrollView contentContainerStyle={styles.container}>
-//       <Text style={styles.header}>Daily CBT Activities</Text>
-
-//       {CBT_ACTIVITIES.map((activity) => {
-//         const status = activityStatus[activity];
-
-//         let buttonStyle = styles.notStarted;
-//         let buttonText = 'Start';
-//         if (status === 'inProgress') {
-//           buttonStyle = styles.inProgress;
-//           buttonText = 'In Progress';
-//         } else if (status === 'completed') {
-//           buttonStyle = styles.completed;
-//           buttonText = 'Completed';
-//         }
-
-//         return (
-//           <TouchableOpacity
-//             key={activity}
-//             style={[styles.button, buttonStyle]}
-//             onPress={() => {
-//               if (status === 'notStarted') handleStartActivity(activity);
-//               else if (status === 'inProgress') handleCompleteActivity(activity);
-//             }}
-//           >
-//             <Text style={styles.buttonText}>{activity} — {buttonText}</Text>
-//           </TouchableOpacity>
-//         );
-//       })}
-//     </ScrollView>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     padding: 16,
-//     alignItems: 'center',
-//   },
-//   header: {
-//     fontSize: 22,
-//     fontWeight: 'bold',
-//     marginBottom: 20,
-//   },
-//   button: {
-//     width: '90%',
-//     paddingVertical: 15,
-//     borderRadius: 10,
-//     marginVertical: 8,
-//     alignItems: 'center',
-//   },
-//   notStarted: {
-//     backgroundColor: '#6C63FF', // blue
-//   },
-//   inProgress: {
-//     backgroundColor: '#dc55ccff', // yellow / in progress
-//   },
-//   completed: {
-//     backgroundColor: '#71b774ff', // green
-//   },
-//   buttonText: {
-//     color: '#f8f0f0ff',
-//     fontSize: 16,
-//     fontWeight: '600',
-//   },
-// });
-///////////////////////////
-// import React, { useState } from 'react';
-// import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-
-// const CBT_ACTIVITIES = [
-//   '1-Minute Breathing',
-//   'Reframe One Thought',
-//   'Tiny Gratitude',
-//   'Say One Kind Thing to Yourself',
-//   'Body Scan Mindfulness',
-//   'Grounding Exercise',
-//   'Positive Affirmation',
-//   'Highlight a Success of the Day',
-// ];
-
-// export default function ActivitiesPage({ navigation }) {
-//   const [activityStatus, setActivityStatus] = useState(
-//     CBT_ACTIVITIES.reduce((acc, activity) => {
-//       acc[activity] = 'notStarted';
-//       return acc;
-//     }, {})
-//   );
-
-//   const handlePressActivity = (activity) => {
-//     navigation.navigate('ActivityDetail', {
-//       activityName: activity,
-//       progress: activityStatus[activity],
-//     });
-//   };
-
-//   return (
-//     <ScrollView contentContainerStyle={styles.container}>
-//       <Text style={styles.header}>Daily CBT Activities</Text>
-
-//       {CBT_ACTIVITIES.map((activity) => {
-//         const status = activityStatus[activity];
-
-//         let buttonStyle = styles.notStarted;
-//         if (status === 'inProgress') buttonStyle = styles.inProgress;
-//         else if (status === 'completed') buttonStyle = styles.completed;
-
-//         return (
-//           <TouchableOpacity
-//             key={activity}
-//             style={[styles.button, buttonStyle]}
-//             onPress={() => handlePressActivity(activity)}
-//           >
-//             <View style={styles.buttonContent}>
-//               <Text style={styles.buttonText}>{activity}</Text>
-//               <Text style={styles.statusText}>
-//                 {status === 'notStarted'
-//                   ? 'Start'
-//                   : status === 'inProgress'
-//                   ? 'In Progress'
-//                   : 'Completed'}
-//               </Text>
-//             </View>
-
-//             {/* Small visual progress bar */}
-//             <View style={styles.progressBarBackground}>
-//               <View
-//                 style={[
-//                   styles.progressBarFill,
-//                   status === 'notStarted'
-//                     ? { width: '0%' }
-//                     : status === 'inProgress'
-//                     ? { width: '50%' }
-//                     : { width: '100%' },
-//                 ]}
-//               />
-//             </View>
-//           </TouchableOpacity>
-//         );
-//       })}
-//     </ScrollView>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: { padding: 16, alignItems: 'center' },
-//   header: { fontSize: 22, fontWeight: 'bold', marginBottom: 20 },
-//   button: {
-//     width: '90%',
-//     paddingVertical: 15,
-//     borderRadius: 10,
-//     marginVertical: 8,
-//     alignItems: 'center',
-//   },
-//   buttonContent: {
-//     width: '100%',
-//     flexDirection: 'row',
-//     justifyContent: 'space-between',
-//     paddingHorizontal: 12,
-//     marginBottom: 6,
-//   },
-//   buttonText: { color: '#f8f0f0ff', fontSize: 16, fontWeight: '600' },
-//   statusText: { color: '#f8f0f0ff', fontSize: 14, fontWeight: '600' },
-//   notStarted: { backgroundColor: '#6C63FF' },
-//   inProgress: { backgroundColor: '#dc55ccff' },
-//   completed: { backgroundColor: '#71b774ff' },
-//   progressBarBackground: {
-//     width: '90%',
-//     height: 5,
-//     backgroundColor: '#ccc',
-//     borderRadius: 3,
-//     alignSelf: 'center',
-//   },
-//   progressBarFill: {
-//     height: 5,
-//     backgroundColor: '#ffdd00', // bright color for progress
-//     borderRadius: 3,
-//   },
-// });
-//////////////////////////////////
-///////////////////////////////////
 // import { router } from "expo-router";
 // import React, { useState } from "react";
 // import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 // const CBT_ACTIVITIES = [
-//   "1-Minute Breathing",
-//   "Reframe One Thought",
-//   "Tiny Gratitude",
-//   "Say One Kind Thing to Yourself",
-//   "Body Scan Mindfulness",
-//   "Grounding Exercise",
-//   "Positive Affirmation",
-//   "Highlight a Success of the Day",
+//   "Cognitive Restructuring / Reframing",
+//   "Behavioral Activation",
+//   "Thought Records / Journaling",
+//   "Exposure / Facing Fears",
+//   "Gratitude Journaling",
+//   "Mindfulness / Present-Moment Awareness",
+//   "Activity Scheduling / Planning Pleasant Events",
+//   "Problem-Solving Exercises",
+//   "Self-Compassion Exercises",
+//   "Goal Setting / Tracking Progress",
 // ];
 
 // export default function ActivitiesPage() {
+//   // Initialize activity status
 //   const [activityStatus] = useState(() =>
-//     Object.fromEntries(CBT_ACTIVITIES.map((item) => [item, "not Started"]))
+//     Object.fromEntries(CBT_ACTIVITIES.map((item) => [item, "notStarted"]))
 //   );
 
+//   // Function to open detail page with params
 //   const openActivity = (activity: string) => {
 //     const status = activityStatus[activity];
+
+//     // Decide button label based on status
 //     const buttonLabel =
 //       status === "notStarted"
 //         ? "Start Activity"
@@ -243,11 +33,15 @@
 //         ? "Continue"
 //         : "View";
 
-//    router.push({
-//   pathname: "/(tabs)/pages/activities/[activity]",
-//   params: { activity: "run" },
-// });
-
+//     // Navigate to ActivityDetail page with all info
+//     router.push({
+//       pathname: "/(tabs)/pages/activities/[activity]",
+//       params: {
+//         activityName: activity,
+//         status: status,
+//         buttonClicked: buttonLabel,
+//       },
+//     });
 //   };
 
 //   return (
@@ -280,52 +74,31 @@
 //   text: { color: "white", fontSize: 16, fontWeight: "600" },
 //   status: { color: "#eee", opacity: 0.7, marginTop: 4 },
 // });
-/////////////////////////////
-///////////////////////////////
 import { router } from "expo-router";
 import React, { useState } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
-
 const CBT_ACTIVITIES = [
-  "Cognitive Restructuring / Reframing",
-  "Behavioral Activation",
-  "Thought Records / Journaling",
-  "Exposure / Facing Fears",
-  "Gratitude Journaling",
-  "Mindfulness / Present-Moment Awareness",
-  "Activity Scheduling / Planning Pleasant Events",
-  "Problem-Solving Exercises",
-  "Self-Compassion Exercises",
-  "Goal Setting / Tracking Progress",
+  {
+    id: "cognitive_restructuring",
+    title: "Cognitive Restructuring / Reframing",
+  },
+  { id: "behavioral_activation", title: "Behavioral Activation" },
+  { id: "thought_journaling", title: "Thought Records / Journaling" },
+  { id: "exposure", title: "Exposure / Facing Fears" },
+  { id: "gratitude_journaling", title: "Gratitude Journaling" },
+  { id: "emotional_reasoning", title: "Emotional Reasoning" },
 ];
 
-
 export default function ActivitiesPage() {
-  // Initialize activity status
   const [activityStatus] = useState(() =>
-    Object.fromEntries(CBT_ACTIVITIES.map((item) => [item, "notStarted"]))
+    Object.fromEntries(CBT_ACTIVITIES.map((a) => [a.id, "notStarted"])),
   );
 
-  // Function to open detail page with params
-  const openActivity = (activity: string) => {
-    const status = activityStatus[activity];
-
-    // Decide button label based on status
-    const buttonLabel =
-      status === "notStarted"
-        ? "Start Activity"
-        : status === "inProgress"
-        ? "Continue"
-        : "View";
-
-    // Navigate to ActivityDetail page with all info
+  const openActivity = (activityId: string) => {
     router.push({
       pathname: "/(tabs)/pages/activities/[activity]",
-      params: {
-        activityName: activity,
-        status: status,
-        buttonClicked: buttonLabel,
-      },
+
+      params: { activity: activityId },
     });
   };
 
@@ -335,27 +108,74 @@ export default function ActivitiesPage() {
 
       {CBT_ACTIVITIES.map((activity) => (
         <TouchableOpacity
-          key={activity}
+          key={activity.id}
           style={styles.card}
-          onPress={() => openActivity(activity)}
+          onPress={() => openActivity(activity.id)}
         >
-          <Text style={styles.text}>{activity}</Text>
-          <Text style={styles.status}>{activityStatus[activity]}</Text>
+          <Text style={styles.text}>{activity.title}</Text>
+          <Text style={styles.status}>{activityStatus[activity.id]}</Text>
         </TouchableOpacity>
       ))}
     </ScrollView>
   );
 }
+const theme = {
+  background: "#F5F7FB",
+  card: "#FFFFFF",
+  primary: "#6366F1",
+  secondary: "#E0E7FF",
+  textPrimary: "#111827",
+  textSecondary: "#6B7280",
+  statusBg: "#EEF2FF",
+};
 
 const styles = StyleSheet.create({
-  container: { padding: 16 },
-  header: { fontSize: 22, fontWeight: "bold", marginBottom: 16 },
-  card: {
-    padding: 16,
-    backgroundColor: "#6C63FF",
-    borderRadius: 10,
-    marginBottom: 12,
+  container: {
+    padding: 20,
+    backgroundColor: theme.background,
   },
-  text: { color: "white", fontSize: 16, fontWeight: "600" },
-  status: { color: "#eee", opacity: 0.7, marginTop: 4 },
+
+  header: {
+    fontSize: 26,
+    fontWeight: "700",
+    color: theme.textPrimary,
+    marginBottom: 22,
+  },
+
+  card: {
+    backgroundColor: theme.card,
+    borderRadius: 18,
+    padding: 18,
+    marginBottom: 16,
+    borderLeftWidth: 5,
+    borderLeftColor: theme.primary,
+
+    // iOS shadow
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+
+    // Android
+    elevation: 4,
+  },
+
+  text: {
+    fontSize: 17,
+    fontWeight: "600",
+    color: theme.textPrimary,
+    marginBottom: 8,
+  },
+
+  status: {
+    alignSelf: "flex-start",
+    backgroundColor: theme.statusBg,
+    color: theme.primary,
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 999,
+    fontSize: 12,
+    fontWeight: "500",
+    textTransform: "capitalize",
+  },
 });

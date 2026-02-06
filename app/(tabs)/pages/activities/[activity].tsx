@@ -1,757 +1,515 @@
 // import { router, useLocalSearchParams } from "expo-router";
-// import React from "react";
-// import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+// import { useState } from "react";
+// import {
+//   ScrollView,
+//   StyleSheet,
+//   Text,
+//   TextInput,
+//   TouchableOpacity,
+//   View,
+// } from "react-native";
+// import { CBT_ACTIVITIES_DATA } from "../../../data/cbtActivities";
 
-// export default function ActivityDetail() {
-//   const { activityName, status } = useLocalSearchParams();
-// const actname ="Say One Kind Thing to Yourself";
+// export default function ActivityJourneyPage() {
+//   const { activity } = useLocalSearchParams<{ activity: string }>();
+
+//   const activityData = CBT_ACTIVITIES_DATA[activity];
+
+//   const [currentStep, setCurrentStep] = useState(0);
+//   const [responses, setResponses] = useState<string[]>([]);
+
+//   if (!activityData) {
+//     return (
+//       <View style={styles.center}>
+//         <Text>Activity not found</Text>
+//       </View>
+//     );
+//   }
+
+//   const step = activityData.steps[currentStep];
+//   const isLastStep = currentStep === activityData.steps.length;
+
+//   const handleNext = () => {
+//     setCurrentStep((prev) => prev + 1);
+//   };
+
 //   return (
-//     <View style={styles.container}>
+//     <ScrollView contentContainerStyle={styles.container}>
+//       {/* Header */}
+//       <Text style={styles.title}>{activityData.title}</Text>
+//       <Text style={styles.subtitle}>{activityData.description}</Text>
 
-//       {/* Top Bar: Back + Status */}
-//       <View style={styles.topRow}>
-//         <TouchableOpacity onPress={() => router.back()}>
-//           <Text style={styles.backArrow}>←</Text>
-//         </TouchableOpacity>
+//       {/* Progress */}
+//       <Text style={styles.progress}>
+//         Step {Math.min(currentStep + 1, activityData.steps.length)} of{" "}
+//         {activityData.steps.length}
+//       </Text>
 
-//         <View 
-//           style={[
-//             styles.statusBox,
-//             status === "completed" ? styles.completed :
-//             status === "inProgress" ? styles.inProgress :
-//             styles.notStarted
-//           ]}
-//         >
-//           <Text style={styles.statusText}>
-//             {status === "notStarted" ? "Start" : status === "inProgress" ? "In Progress" : "Completed"}
-//           </Text>
+//       {/* Steps */}
+//       {!isLastStep ? (
+//         <View style={styles.card}>
+//           <Text style={styles.stepTitle}>{step.title}</Text>
+//           <Text style={styles.stepDescription}>{step.description}</Text>
+
+//           <TextInput
+//             style={styles.input}
+//             placeholder="Type your thoughts here..."
+//             multiline
+//             value={responses[currentStep] || ""}
+//             onChangeText={(text) => {
+//               const updated = [...responses];
+//               updated[currentStep] = text;
+//               setResponses(updated);
+//             }}
+//           />
+
+//           <TouchableOpacity style={styles.button} onPress={handleNext}>
+//             <Text style={styles.buttonText}>Continue</Text>
+//           </TouchableOpacity>
 //         </View>
-//       </View>
+//       ) : (
+//         /* Final Summary */
+//         <View style={styles.card}>
+//           <Text style={styles.stepTitle}>✨ Your Reflection</Text>
 
-//       {/* Page Title */}
-//       <Text style={styles.title}>{actname}</Text>
+//           {activityData.steps.map((s, i) => (
+//             <View key={i} style={styles.summaryItem}>
+//               <Text style={styles.summaryTitle}>{s.title}</Text>
+//               <Text style={styles.summaryText}>{responses[i] || "—"}</Text>
+//             </View>
+//           ))}
 
-//       {/* Page Body */}
-//       <View style={styles.body}>
-//         <Text style={styles.placeholderText}>
-//           Page content will go here...
-//         </Text>
-//       </View>
+//           <View style={styles.reframeBox}>
+//             <Text style={styles.reframeTitle}>Reframed Thought</Text>
+//             <Text style={styles.reframeText}>
+//               {activityData.reframeTemplate}
+//             </Text>
+//           </View>
 
-//     </View>
+//           <TouchableOpacity
+//             style={[styles.button, styles.doneButton]}
+//             onPress={() => router.back()}
+//           >
+//             <Text style={styles.buttonText}>Finish Activity</Text>
+//           </TouchableOpacity>
+//         </View>
+//       )}
+//     </ScrollView>
 //   );
 // }
-
 // const styles = StyleSheet.create({
-//   container: { flex: 1, backgroundColor: "#fff", paddingTop: 40 },
-
-//   /** NEW TOP ROW */
-//   topRow: {
-//     flexDirection: "row",
-//     alignItems: "center",
-//     justifyContent: "space-between",
-//     paddingHorizontal: 20,
-//     marginBottom: 10,
+//   container: {
+//     padding: 20,
+//     backgroundColor: "#FAFBFF",
 //   },
 
-//   backArrow: { fontSize: 26, fontWeight: "700", color: "#333" },
-
-//   /** STATUS TAG */
-//   statusBox: {
-//     paddingVertical: 6,
-//     paddingHorizontal: 12,
-//     borderRadius: 10,
-//   },
-//   statusText: { color: "#fff", fontWeight: "600", fontSize: 13 },
-
-//   notStarted: { backgroundColor: "#6C63FF" },
-//   inProgress: { backgroundColor: "#dc55cc" },
-//   completed: { backgroundColor: "#71b774" },
-
-//   /** TITLE */
-//   title: {
-//     textAlign: "center",
-//     fontSize: 18,
-//     fontWeight: "700",
-//     color: "#333",
-//     marginBottom: 16,
-//   },
-
-//   /** BODY */
-//   body: {
+//   center: {
 //     flex: 1,
 //     alignItems: "center",
 //     justifyContent: "center",
-//     paddingHorizontal: 20,
 //   },
-//   placeholderText: { fontSize: 16, color: "#555" },
-// });
-/////////////////////////////////
-// import { router, useLocalSearchParams } from "expo-router";
-// import React, { useState } from "react";
-// import {
-//   StyleSheet,
-//   Text,
-//   TextInput,
-//   TouchableOpacity,
-//   View,
-// } from "react-native";
-// import TreeReward from "../../../components/treeReward";
 
-// export default function ActivityDetail() {
-//   const { activityName, statues } = useLocalSearchParams();
-//   const actname = "Say One Kind Thing to Yourself";
-//   const status = "inProgress";
-
-//   const [input, setInput] = useState("");
-//   const [inputHeight, setInputHeight] = useState(40); // min height
-//   const [sentiment, setSentiment] = useState(null);
-//   const [selectedMood, setSelectedMood] = useState<"sad" | "neutral" | "happy" | null>(null);
-
-//   const detectSentiment = (text: string) => {
-//     const positiveWords = ["proud", "happy", "strong", "good", "capable", "love"];
-//     const negativeWords = ["fail", "bad", "tired", "stressed", "discouraged"];
-//     const lower = text.toLowerCase();
-//     if (positiveWords.some((word) => lower.includes(word))) return "positive";
-//     if (negativeWords.some((word) => lower.includes(word))) return "negative";
-//     return "neutral";
-//   };
-
-//   const handleSubmit = () => {
-//     const s = detectSentiment(input);
-//     setSentiment(s);
-//   };
-
-//   const handleChange = (text: string) => {
-//     if (text.length <= 100) setInput(text); // limit 100 chars
-//   };
-
-//   const selectMood = (mood: "sad" | "neutral" | "happy") => {
-//     setSelectedMood(mood);
-//     if (mood === "sad") setInput("I feel bad about today");
-//     else if (mood === "neutral") setInput("I tried, not perfect");
-//     else if (mood === "happy") setInput("I am proud I handled this well");
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       {/* Top Bar */}
-//       <View style={styles.topRow}>
-//         <TouchableOpacity onPress={() => router.back()}>
-//           <Text style={styles.backArrow}>←</Text>
-//         </TouchableOpacity>
-//         <View
-//           style={[
-//             styles.statusBox,
-//             status === "completed"
-//               ? styles.completed
-//               : status === "inProgress"
-//               ? styles.inProgress
-//               : styles.notStarted,
-//           ]}
-//         >
-//           <Text style={styles.statusText}>
-//             {status === "notStarted"
-//               ? "Start"
-//               : status === "inProgress"
-//               ? "In Progress"
-//               : "Completed"}
-//           </Text>
-//         </View>
-//       </View>
-
-//       {/* Page Title */}
-//       <Text style={styles.title}>{actname}</Text>
-
-//       {/* Sentiment Circles */}
-//       <View style={styles.colorPicker}>
-//         <View style={styles.colorColumn}>
-//           <TouchableOpacity
-//             style={[
-//               styles.moodCircle,
-//               styles.sadCircle,
-//               selectedMood === "sad" ? styles.hollowCircle : styles.filledCircle,
-//             ]}
-//             onPress={() => selectMood("sad")}
-//           />
-//           <Text style={styles.colorLabel}>Sad</Text>
-//         </View>
-//         <View style={styles.colorColumn}>
-//           <TouchableOpacity
-//             style={[
-//               styles.moodCircle,
-//               styles.neutralCircle,
-//               selectedMood === "neutral" ? styles.hollowCircle : styles.filledCircle,
-//             ]}
-//             onPress={() => selectMood("neutral")}
-//           />
-//           <Text style={styles.colorLabel}>Neutral</Text>
-//         </View>
-//         <View style={styles.colorColumn}>
-//           <TouchableOpacity
-//             style={[
-//               styles.moodCircle,
-//               styles.happyCircle,
-//               selectedMood === "happy" ? styles.hollowCircle : styles.filledCircle,
-//             ]}
-//             onPress={() => selectMood("happy")}
-//           />
-//           <Text style={styles.colorLabel}>Happy</Text>
-//         </View>
-//       </View>
-
-//       {/* Dynamic TextInput */}
-//       <TextInput
-//         style={[
-//           styles.input,
-//           { height: Math.min(Math.max(40, inputHeight), 120) },
-//         ]}
-//         multiline
-//         value={input}
-//         onChangeText={handleChange}
-//         placeholder="Send"
-//         placeholderTextColor="#aaa"
-//         onContentSizeChange={(e) => setInputHeight(e.nativeEvent.contentSize.height + 10)}
-//         textAlignVertical="top"
-//       />
-
-//       {/* Submit Button */}
-//       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-//         <Text style={styles.buttonText}>Send</Text>
-//       </TouchableOpacity>
-
-//       {/* Growth Tree Component */}
-//       {sentiment && <TreeReward sentiment={sentiment} />}
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: { flex: 1, backgroundColor: "#efefefff", paddingTop: 40 },
-//   topRow: {
-//     flexDirection: "row",
-//     alignItems: "center",
-//     justifyContent: "space-between",
-//     paddingHorizontal: 20,
-//     marginBottom: 10,
-//   },
-//   backArrow: { fontSize: 26, fontWeight: "700", color: "#333" },
-//   statusBox: { paddingVertical: 6, paddingHorizontal: 12, borderRadius: 10 },
-//   statusText: { color: "#e1ddddff", fontWeight: "600", fontSize: 13 },
-//   notStarted: { backgroundColor: "#6C63FF" },
-//   inProgress: { backgroundColor: "#dc55cc" },
-//   completed: { backgroundColor: "#71b774" },
 //   title: {
-//     textAlign: "center",
-//     fontSize: 18,
+//     fontSize: 24,
 //     fontWeight: "700",
-//     color: "#333",
+//     color: "#1E293B",
+//     marginBottom: 6,
+//   },
+
+//   subtitle: {
+//     fontSize: 14,
+//     color: "#64748B",
+//     marginBottom: 20,
+//   },
+
+//   progress: {
+//     fontSize: 12,
+//     color: "#94A3B8",
+//     marginBottom: 12,
+//   },
+
+//   card: {
+//     backgroundColor: "#FFFFFF",
+//     borderRadius: 18,
+//     padding: 20,
+//     shadowColor: "#000",
+//     shadowOpacity: 0.05,
+//     shadowRadius: 10,
+//     elevation: 3,
+//   },
+
+//   stepTitle: {
+//     fontSize: 18,
+//     fontWeight: "600",
+//     color: "#0F172A",
+//     marginBottom: 6,
+//   },
+
+//   stepDescription: {
+//     fontSize: 14,
+//     color: "#475569",
+//     marginBottom: 14,
+//   },
+
+//   input: {
+//     minHeight: 100,
+//     backgroundColor: "#F8FAFC",
+//     borderRadius: 12,
+//     padding: 12,
+//     fontSize: 14,
+//     textAlignVertical: "top",
+//     borderWidth: 1,
+//     borderColor: "#E2E8F0",
 //     marginBottom: 16,
 //   },
-//   input: {
-//     width: "90%",
-//     borderColor: "#ccc",
-//     borderWidth: 1,
-//     padding: 10,
-//     borderRadius: 10,
-//     marginBottom: 10,
-//     alignSelf: "center",
-//   },
-//   colorPicker: {
-//     flexDirection: "row",
-//     justifyContent: "space-around",
-//     marginBottom: 10,
-//   },
-//   colorColumn: { alignItems: "center" },
-//   colorLabel: { fontSize: 12, color: "#333" },
-
-//   // Mood Circle Styles
-//   moodCircle: { width: 30, height: 30, borderRadius: 15, marginBottom: 4 },
-//   sadCircle: { backgroundColor: "red" },
-//   neutralCircle: { backgroundColor: "yellow" },
-//   happyCircle: { backgroundColor: "green" },
-//   filledCircle: { borderWidth: 0 },
-//   hollowCircle: { backgroundColor: "transparent", borderWidth: 2, borderColor: "#333" },
 
 //   button: {
-//     backgroundColor: "#4CAF50",
-//     paddingVertical: 10,
-//     paddingHorizontal: 20,
-//     borderRadius: 10,
-//     alignSelf: "center",
-//   },
-//   buttonText: { color: "white", fontWeight: "bold", fontSize: 16 },
-// });
-//////////////////
-////////////////////////
-// import { router, useLocalSearchParams } from "expo-router";
-// import React, { useState } from "react";
-// import {
-//   StyleSheet,
-//   Text,
-//   TextInput,
-//   TouchableOpacity,
-//   View,
-// } from "react-native";
-// import TreeReward from "../../../components/treeReward";
-
-// export default function ActivityDetail() {
-//   const { activityName, statues } = useLocalSearchParams();
-//   const actname = "Say One Kind Thing to Yourself";
-//   const status = "inProgress";
-
-//   const [input, setInput] = useState("");
-//   const [inputHeight, setInputHeight] = useState(40);
-//   const [sentiment, setSentiment] = useState<"positive" | "negative" | "neutral" | null>(null);
-//   const [selectedMood, setSelectedMood] = useState<"sad" | "neutral" | "happy" | null>(null);
-//   const [sentData, setSentData] = useState<any>(null); // To display sent info
-
-//   // Simple sentiment detection
-//   const detectSentiment = (text: string) => {
-//     const positiveWords = ["proud", "happy", "strong", "good", "capable", "love"];
-//     const negativeWords = ["fail", "bad", "tired", "stressed", "discouraged"];
-//     const lower = text.toLowerCase();
-//     if (positiveWords.some((word) => lower.includes(word))) return "positive";
-//     if (negativeWords.some((word) => lower.includes(word))) return "negative";
-//     return "neutral";
-//   };
-
-//   // Handle submit: detect sentiment, map mood to +/-, send to Python
-//   const handleSubmit = async () => {
-//     const s = detectSentiment(input);
-//     setSentiment(s);
-
-//     let moodSymbol: "+" | "-" | "neutral" = "neutral";
-//     if (selectedMood === "happy") moodSymbol = "+";
-//     else if (selectedMood === "sad") moodSymbol = "-";
-//     else moodSymbol = "neutral";
-
-//     const payload = {
-//       text: input,
-//       mood: moodSymbol,
-//       sentiment: s,
-//     };
-
-//     setSentData(payload); // Display below button
-
-//     try {
-//       const response = await fetch("http://YOUR_PYTHON_SERVER_URL/submit", {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify(payload),
-//       });
-//       const data = await response.json();
-//       console.log("Response from Python:", data);
-//     } catch (error) {
-//       console.error("Error sending data:", error);
-//     }
-//   };
-
-//   const handleChange = (text: string) => {
-//     if (text.length <= 100) setInput(text);
-//   };
-
-//   const selectMood = (mood: "sad" | "neutral" | "happy") => {
-//     setSelectedMood(mood);
-//     if (mood === "sad") setInput("I feel bad about today");
-//     else if (mood === "neutral") setInput("I tried, not perfect");
-//     else if (mood === "happy") setInput("I am proud I handled this well");
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       {/* Top Bar */}
-//       <View style={styles.topRow}>
-//         <TouchableOpacity onPress={() => router.back()}>
-//           <Text style={styles.backArrow}>←</Text>
-//         </TouchableOpacity>
-//         <View
-//           style={[
-//             styles.statusBox,
-//             status === "completed"
-//               ? styles.completed
-//               : status === "inProgress"
-//               ? styles.inProgress
-//               : styles.notStarted,
-//           ]}
-//         >
-//           <Text style={styles.statusText}>
-//             {status === "notStarted"
-//               ? "Start"
-//               : status === "inProgress"
-//               ? "In Progress"
-//               : "Completed"}
-//           </Text>
-//         </View>
-//       </View>
-
-//       {/* Page Title */}
-//       <Text style={styles.title}>{actname}</Text>
-
-//       {/* Sentiment Circles */}
-//       <View style={styles.colorPicker}>
-//         <View style={styles.colorColumn}>
-//           <TouchableOpacity
-//             style={[
-//               styles.moodCircle,
-//               styles.sadCircle,
-//               selectedMood === "sad" ? styles.hollowCircle : styles.filledCircle,
-//             ]}
-//             onPress={() => selectMood("sad")}
-//           />
-//           <Text style={styles.colorLabel}>Sad</Text>
-//         </View>
-//         <View style={styles.colorColumn}>
-//           <TouchableOpacity
-//             style={[
-//               styles.moodCircle,
-//               styles.neutralCircle,
-//               selectedMood === "neutral" ? styles.hollowCircle : styles.filledCircle,
-//             ]}
-//             onPress={() => selectMood("neutral")}
-//           />
-//           <Text style={styles.colorLabel}>Neutral</Text>
-//         </View>
-//         <View style={styles.colorColumn}>
-//           <TouchableOpacity
-//             style={[
-//               styles.moodCircle,
-//               styles.happyCircle,
-//               selectedMood === "happy" ? styles.hollowCircle : styles.filledCircle,
-//             ]}
-//             onPress={() => selectMood("happy")}
-//           />
-//           <Text style={styles.colorLabel}>Happy</Text>
-//         </View>
-//       </View>
-
-//       {/* Dynamic TextInput */}
-//       <TextInput
-//         style={[
-//           styles.input,
-//           { height: Math.min(Math.max(40, inputHeight), 120) },
-//         ]}
-//         multiline
-//         value={input}
-//         onChangeText={handleChange}
-//         placeholder="Send"
-//         placeholderTextColor="#aaa"
-//         onContentSizeChange={(e) => setInputHeight(e.nativeEvent.contentSize.height + 10)}
-//         textAlignVertical="top"
-//       />
-
-//       {/* Submit Button */}
-//       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-//         <Text style={styles.buttonText}>Send</Text>
-//       </TouchableOpacity>
-
-//       {/* Show sent information */}
-//       {sentData && (
-//         <View style={styles.sentInfo}>
-//           <Text style={{ fontWeight: "bold" }}>Sent Information:</Text>
-//           <Text>Text: {sentData.text}</Text>
-//           <Text>Mood: {sentData.mood}</Text>
-//           <Text>Sentiment: {sentData.sentiment}</Text>
-//         </View>
-//       )}
-
-//       {/* Growth Tree Component */}
-//       {sentiment && <TreeReward sentiment={sentiment} />}
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: { flex: 1, backgroundColor: "#efefefff", paddingTop: 40 },
-//   topRow: {
-//     flexDirection: "row",
+//     backgroundColor: "#6366F1",
+//     paddingVertical: 14,
+//     borderRadius: 14,
 //     alignItems: "center",
-//     justifyContent: "space-between",
-//     paddingHorizontal: 20,
-//     marginBottom: 10,
 //   },
-//   backArrow: { fontSize: 26, fontWeight: "700", color: "#333" },
-//   statusBox: { paddingVertical: 6, paddingHorizontal: 12, borderRadius: 10 },
-//   statusText: { color: "#e1ddddff", fontWeight: "600", fontSize: 13 },
-//   notStarted: { backgroundColor: "#6C63FF" },
-//   inProgress: { backgroundColor: "#dc55cc" },
-//   completed: { backgroundColor: "#71b774" },
-//   title: {
-//     textAlign: "center",
-//     fontSize: 18,
+
+//   doneButton: {
+//     marginTop: 20,
+//     backgroundColor: "#22C55E",
+//   },
+
+//   buttonText: {
+//     color: "#FFFFFF",
+//     fontWeight: "600",
+//   },
+
+//   summaryItem: {
+//     marginBottom: 12,
+//   },
+
+//   summaryTitle: {
+//     fontSize: 13,
+//     fontWeight: "600",
+//     color: "#334155",
+//   },
+
+//   summaryText: {
+//     fontSize: 14,
+//     color: "#475569",
+//   },
+
+//   reframeBox: {
+//     marginTop: 20,
+//     backgroundColor: "#EEF2FF",
+//     padding: 14,
+//     borderRadius: 12,
+//   },
+
+//   reframeTitle: {
+//     fontSize: 14,
 //     fontWeight: "700",
-//     color: "#333",
-//     marginBottom: 16,
+//     color: "#4338CA",
+//     marginBottom: 6,
 //   },
-//   input: {
-//     width: "90%",
-//     borderColor: "#ccc",
-//     borderWidth: 1,
-//     padding: 10,
-//     borderRadius: 10,
-//     marginBottom: 10,
-//     alignSelf: "center",
-//   },
-//   colorPicker: {
-//     flexDirection: "row",
-//     justifyContent: "space-around",
-//     marginBottom: 10,
-//   },
-//   colorColumn: { alignItems: "center" },
-//   colorLabel: { fontSize: 12, color: "#333" },
-//   moodCircle: { width: 30, height: 30, borderRadius: 15, marginBottom: 4 },
-//   sadCircle: { backgroundColor: "red" },
-//   neutralCircle: { backgroundColor: "yellow" },
-//   happyCircle: { backgroundColor: "green" },
-//   filledCircle: { borderWidth: 0 },
-//   hollowCircle: { backgroundColor: "transparent", borderWidth: 2, borderColor: "#333" },
-//   button: {
-//     backgroundColor: "#4CAF50",
-//     paddingVertical: 10,
-//     paddingHorizontal: 20,
-//     borderRadius: 10,
-//     alignSelf: "center",
-//   },
-//   buttonText: { color: "white", fontWeight: "bold", fontSize: 16 },
-//   sentInfo: {
-//     marginTop: 10,
-//     padding: 10,
-//     backgroundColor: "#fff",
-//     marginHorizontal: 20,
-//     borderRadius: 10,
-//     borderWidth: 1,
-//     borderColor: "#ccc",
+
+//   reframeText: {
+//     fontSize: 14,
+//     color: "#3730A3",
 //   },
 // });
-/////////////////
+
 import { router, useLocalSearchParams } from "expo-router";
-import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { CBT_ACTIVITIES_DATA } from "../../../data/cbtActivities";
 
-export default function ActivityDetail() {
-  // Receive data from previous page
-  const [responseData, setResponseData] = useState(null);
-  const [rating, setRating] = useState("");
-  const [reason, setReason] = useState("");
-  const [motivation, setMotivation] = useState("");
-  const handleSubmit = () => {
-  const moodSymbol: "+" | "-" | "neutral" =
-    selectedMood === "happy" ? "+" : selectedMood === "sad" ? "-" : "neutral";
+export default function ActivityJourneyPage() {
+  const { activity } = useLocalSearchParams<{ activity: string }>();
+  const activityData = CBT_ACTIVITIES_DATA[activity];
 
-  const payload = {
-    activityName,
-    status,
-    buttonClicked,
-    userInput: input,
-    mood: moodSymbol,
+  const [currentStep, setCurrentStep] = useState(0);
+  const [responses, setResponses] = useState<string[]>([]);
+
+  if (!activityData) {
+    return (
+      <View style={styles.center}>
+        <Text>Activity not found</Text>
+      </View>
+    );
+  }
+
+  const step = activityData.steps[currentStep];
+  const isLastStep = currentStep === activityData.steps.length;
+
+  const handleNext = () => {
+    setCurrentStep((prev) => prev + 1);
   };
 
-  setSentData(payload);
-  setInput(""); // optional: clear input after submit
-
-  // ----- New: send data to Flask backend -----
-  // fetch("http://192.168.1.7:5000/submit", {
-  //   method: "POST",
-  //   headers: { "Content-Type": "application/json" },
-  //   body: JSON.stringify(payload),
-  // })
-  //   .then((res) => res.json())
-  //   .then((data) => console.log("Server response:", data))
-  //   .catch((err) => console.error("Error sending data:", err));
-  fetch("http://192.168.1.7:5000/submit", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(payload),
-})
-  .then(async (res) => {
-    if (!res.ok) {
-      const text = await res.text();
-      throw new Error(`Server error: ${res.status} - ${text}`);
-    }
-    return res.json(); // parse JSON if OK
-  })
-  .then((data) => {
-    // Safely access only the part you want
-    const modelResult = data.model_result || {};
-    console.log("Server response:", modelResult);
-    console.log("Rating:", modelResult.rating);
-    console.log("Reason:", modelResult.reason);
-    console.log("Motivation:", modelResult.motivation);
-     setRating(modelResult.rating);
-      setReason(modelResult.reason);
-      setMotivation(modelResult.motivation);
-  })
-  .catch((err) => console.error("Error sending data:", err));
-
-};
-
-  const { activityName, status = "inProgress", buttonClicked } = useLocalSearchParams();
-
-  const [input, setInput] = useState("");
-  const [inputHeight, setInputHeight] = useState(40);
-  const [selectedMood, setSelectedMood] = useState<"sad" | "neutral" | "happy" | null>(null);
-  const [sentData, setSentData] = useState<any>(null); // Store submitted data
-
-  // Handle submit: just save input + mood + received params
-  // const handleSubmit = () => {
-  //   const moodSymbol: "+" | "-" | "neutral" =
-  //     selectedMood === "happy" ? "+" : selectedMood === "sad" ? "-" : "neutral";
-
-  //   const payload = {
-  //     activityName,
-  //     status,
-  //     buttonClicked,
-  //     userInput: input,
-  //     mood: moodSymbol,
-  //   };
-
-  //   setSentData(payload);
-  //   setInput(""); // optional: clear input after submit
-  // };
-
-  const selectMood = (mood: "sad" | "neutral" | "happy") => setSelectedMood(mood);
-
   return (
-    <View style={styles.container}>
-      {/* Top Bar */}
-      <View style={styles.topRow}>
-        <TouchableOpacity style={styles.backContainer} onPress={() => router.back()}>
-          <Text style={styles.backArrow}>←</Text>
-        </TouchableOpacity>
-        <View
-          style={[
-            styles.statusBox,
-            status === "completed"
-              ? styles.completed
-              : status === "inProgress"
-              ? styles.inProgress
-              : styles.notStarted,
-          ]}
-        >
-          <Text style={styles.statusText}>
-            {status === "notStarted" ? "Start" : status === "inProgress" ? "In Progress" : "Completed"}
+    <ScrollView contentContainerStyle={styles.container}>
+      {/* Header */}
+      <View style={styles.headerCard}>
+        <Text style={styles.title}>{activityData.title}</Text>
+        <Text style={styles.subtitle}>{activityData.description}</Text>
+
+        <View style={styles.badge}>
+          <Text style={styles.badgeText}>
+            🎯 Step {Math.min(currentStep + 1, activityData.steps.length)} /{" "}
+            {activityData.steps.length}
           </Text>
         </View>
       </View>
 
-      {/* Page Title */}
-      <Text style={styles.title}>{activityName || "Activity Detail"}</Text>
+      {!isLastStep ? (
+        <View style={styles.stepCard}>
+          <Text style={styles.stepTitle}>{step.title}</Text>
+          <Text style={styles.stepExplain}>{step.explain}</Text>
 
-      {/* Mood Selection */}
-      <View style={styles.colorPicker}>
-        <View style={styles.colorColumn}>
-          <TouchableOpacity
-            style={[
-              styles.moodCircle,
-              styles.sadCircle,
-              selectedMood === "sad" ? styles.hollowCircle : styles.filledCircle,
-            ]}
-            onPress={() => selectMood("sad")}
+          {/* Examples / Hints */}
+          {step.examples?.length > 0 && (
+            <View style={styles.examplesBox}>
+              <Text style={styles.examplesTitle}>💡 Examples</Text>
+              {step.examples.map((ex: string, i: number) => (
+                <View key={i} style={styles.exampleChip}>
+                  <Text style={styles.exampleText}>{ex}</Text>
+                </View>
+              ))}
+            </View>
+          )}
+
+          {/* Input */}
+          <TextInput
+            style={styles.input}
+            placeholder="Type your thoughts here..."
+            placeholderTextColor="#94A3B8"
+            multiline
+            value={responses[currentStep] || ""}
+            onChangeText={(text) => {
+              const updated = [...responses];
+              updated[currentStep] = text;
+              setResponses(updated);
+            }}
           />
-          <Text style={styles.colorLabel}>Sad</Text>
+
+          <TouchableOpacity style={styles.button} onPress={handleNext}>
+            <Text style={styles.buttonText}>Continue ➜</Text>
+          </TouchableOpacity>
         </View>
-        <View style={styles.colorColumn}>
+      ) : (
+        /* Final Summary Screen */
+        <View style={styles.finalCard}>
+          <Text style={styles.finalTitle}>🌼 You Completed This Journey</Text>
+          <Text style={styles.finalSubtitle}>
+            Take a moment to see what you reflected on
+          </Text>
+
+          {activityData.steps.map((s: any, i: number) => (
+            <View key={i} style={styles.summaryItem}>
+              <Text style={styles.summaryTitle}>{s.title}</Text>
+              <Text style={styles.summaryText}>{responses[i] || "—"}</Text>
+            </View>
+          ))}
+
+          <View style={styles.reframeBox}>
+            <Text style={styles.reframeTitle}>✨ Gentle Reframe</Text>
+            <Text style={styles.reframeText}>
+              {activityData.reframeExamples?.[0]}
+            </Text>
+          </View>
+
           <TouchableOpacity
-            style={[
-              styles.moodCircle,
-              styles.neutralCircle,
-              selectedMood === "neutral" ? styles.hollowCircle : styles.filledCircle,
-            ]}
-            onPress={() => selectMood("neutral")}
-          />
-          <Text style={styles.colorLabel}>Neutral</Text>
-        </View>
-        <View style={styles.colorColumn}>
-          <TouchableOpacity
-            style={[
-              styles.moodCircle,
-              styles.happyCircle,
-              selectedMood === "happy" ? styles.hollowCircle : styles.filledCircle,
-            ]}
-            onPress={() => selectMood("happy")}
-          />
-          <Text style={styles.colorLabel}>Happy</Text>
-        </View>
-      </View>
-
-      {/* Text Input */}
-      <TextInput
-        style={[styles.input, { height: Math.min(Math.max(40, inputHeight), 120) }]}
-        multiline
-        value={input}
-        onChangeText={(text) => setInput(text)}
-        placeholder="Type your response..."
-        placeholderTextColor="#aaa"
-        onContentSizeChange={(e) => setInputHeight(e.nativeEvent.contentSize.height + 10)}
-        textAlignVertical="top"
-      />
-
-      {/* Submit Button */}
-      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Send</Text>
-      </TouchableOpacity>
-
-      {/* Display Submitted Data */}
-      {sentData && (
-        <View style={styles.sentInfo}>
-          <Text style={{ fontWeight: "bold" }}>Submitted Data:</Text>
-          <Text>Activity: {sentData.activityName}</Text>
-          <Text>Status: {sentData.status}</Text>
-          <Text>Button: {sentData.buttonClicked}</Text>
-          <Text>User Input: {sentData.userInput}</Text>
-          <Text>Mood: {sentData.mood}</Text>
+            style={[styles.button, styles.doneButton]}
+            onPress={() => router.back()}
+          >
+            <Text style={styles.buttonText}>Finish</Text>
+          </TouchableOpacity>
         </View>
       )}
-        <Text style={styles.label}>Rating:</Text>
-      <Text style={styles.value}>{rating}</Text>
-
-      <Text style={styles.label}>Reason:</Text>
-      <Text style={styles.value}>{reason}</Text>
-
-      <Text style={styles.label}>Motivation:</Text>
-      <Text style={styles.value}>{motivation}</Text>
-    {/* </View> */}
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#efefefff", paddingTop: 40 },
-  topRow: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 20, marginBottom: 10 },
-
-backArrow: {
-  fontSize: 20,     fontFamily: "Roboto-Black",               // smaller to fit nicely in container
-  fontWeight: "900",
-  color: "#5755daff",                 // white arrow for contrast
-},
-
-  statusBox: { paddingVertical: 6, paddingHorizontal: 12, borderRadius: 10 },
-  statusText: { color: "#ffffffff", fontWeight: "600", fontSize: 13 },
-  notStarted: { backgroundColor: "#6C63FF" },
-  inProgress: { backgroundColor: "#dc55cc" },
-  completed: { backgroundColor: "#71b774" },
-  title: { textAlign: "center", fontSize: 18, fontWeight: "700", color: "#333", marginBottom: 16 },
-  colorPicker: { flexDirection: "row", justifyContent: "space-around", marginBottom: 10 },
-  colorColumn: { alignItems: "center" },
-  colorLabel: { fontSize: 12, color: "#333" },
-  moodCircle: { width: 30, height: 30, borderRadius: 15, marginBottom: 4 },
-  sadCircle: { backgroundColor: "red" },
-  neutralCircle: { backgroundColor: "#eae206ff" },
-  happyCircle: { backgroundColor: "#4cb74fff" },
-  filledCircle: { borderWidth: 0 },
-  hollowCircle: { backgroundColor: "transparent", borderWidth: 2, borderColor: "#333" },
-  input: { width: "90%", borderColor: "#ccc", borderWidth: 1, padding: 10, borderRadius: 10, marginBottom: 10, alignSelf: "center" },
-  button: { backgroundColor: "#3ea442ff", paddingVertical: 10, paddingHorizontal: 20, borderRadius: 10, alignSelf: "center" },
-  buttonText: { color: "white", fontWeight: "bold", fontSize: 16 },
-  sentInfo: { marginTop: 10, padding: 10, backgroundColor: "#fff", marginHorizontal: 20, borderRadius: 10, borderWidth: 1, borderColor: "#ccc" },
-container: {
+  container: {
     padding: 20,
+    backgroundColor: "#F5F7FF",
   },
-  label: {
-    fontWeight: "bold",
-    marginTop: 15,
+
+  center: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  value: {
-    fontSize: 16,
+
+  headerCard: {
+    backgroundColor: "#EEF2FF",
+    borderRadius: 20,
+    padding: 20,
+    marginBottom: 18,
+  },
+
+  title: {
+    fontSize: 26,
+    fontWeight: "700",
+    color: "#312E81",
+  },
+
+  subtitle: {
+    fontSize: 14,
+    color: "#4338CA",
+    marginTop: 6,
+  },
+
+  badge: {
+    alignSelf: "flex-start",
+    marginTop: 12,
+    backgroundColor: "#C7D2FE",
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 999,
+  },
+
+  badgeText: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: "#1E1B4B",
+  },
+
+  stepCard: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 22,
+    padding: 22,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowRadius: 12,
+    elevation: 4,
+  },
+
+  stepTitle: {
+    fontSize: 20,
+    fontWeight: "700",
+    color: "#0F172A",
+    marginBottom: 8,
+  },
+
+  stepExplain: {
+    fontSize: 14,
+    color: "#475569",
+    lineHeight: 20,
+    marginBottom: 14,
+  },
+
+  examplesBox: {
+    backgroundColor: "#F1F5FF",
+    padding: 14,
+    borderRadius: 16,
+    marginBottom: 16,
+  },
+
+  examplesTitle: {
+    fontSize: 13,
+    fontWeight: "700",
+    color: "#4338CA",
+    marginBottom: 8,
+  },
+
+  exampleChip: {
+    backgroundColor: "#E0E7FF",
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+    marginBottom: 6,
+  },
+
+  exampleText: {
+    fontSize: 13,
+    color: "#3730A3",
+  },
+
+  input: {
+    minHeight: 110,
+    backgroundColor: "#F8FAFC",
+    borderRadius: 16,
+    padding: 14,
+    fontSize: 14,
+    textAlignVertical: "top",
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+    marginBottom: 18,
+  },
+
+  button: {
+    backgroundColor: "#6366F1",
+    paddingVertical: 14,
+    borderRadius: 16,
+    alignItems: "center",
+  },
+
+  doneButton: {
+    marginTop: 24,
+    backgroundColor: "#22C55E",
+  },
+
+  buttonText: {
+    color: "#FFFFFF",
+    fontWeight: "700",
+    fontSize: 15,
+  },
+
+  finalCard: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 24,
+    padding: 22,
+  },
+
+  finalTitle: {
+    fontSize: 22,
+    fontWeight: "800",
+    color: "#065F46",
+  },
+
+  finalSubtitle: {
+    fontSize: 14,
+    color: "#047857",
+    marginBottom: 18,
+  },
+
+  summaryItem: {
+    marginBottom: 14,
+  },
+
+  summaryTitle: {
+    fontSize: 13,
+    fontWeight: "700",
+    color: "#334155",
+  },
+
+  summaryText: {
+    fontSize: 14,
+    color: "#475569",
+    marginTop: 2,
+  },
+
+  reframeBox: {
+    marginTop: 20,
+    backgroundColor: "#ECFDF5",
+    padding: 16,
+    borderRadius: 16,
+  },
+
+  reframeTitle: {
+    fontSize: 14,
+    fontWeight: "800",
+    color: "#065F46",
+    marginBottom: 6,
+  },
+
+  reframeText: {
+    fontSize: 14,
+    color: "#047857",
   },
 });

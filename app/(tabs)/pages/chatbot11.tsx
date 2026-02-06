@@ -1,14 +1,15 @@
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 import {
-    FlatList,
-    Modal,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  FlatList,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 export default function ChatbotScreen() {
@@ -19,6 +20,12 @@ export default function ChatbotScreen() {
   const [sidebarVisible, setSidebarVisible] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [chatToShare, setChatToShare] = useState(null);
+
+  const dummyResponses = [
+    ["Sure! Here are a few points to get started:", "1. Define your goal clearly.", "2. Gather relevant data and plan structure.", "3. Iterate with improvements."],
+    ["Here’s a summary of your topic:", "• It helps improve workflow efficiency.", "• Easy to integrate and scale.", "• User-friendly interface."],
+    ["Let’s break that down:", "→ Step 1: Understand requirements.", "→ Step 2: Implement and test.", "→ Step 3: Review and deploy."]
+  ];
 
   const therapists = [
     { id: 1, name: "Dr. Alice" },
@@ -41,49 +48,17 @@ export default function ChatbotScreen() {
     catch (e) { console.log('Error saving sessions:', e); }
   };
 
-  // 🔥🔥 BACKEND API CALL HERE 🔥🔥
-// Replace with your PC's IPv4 address
-const API_URL = "http://172.16.121.159:3000/api/chat";
-
-const sendToBackend = async (message) => {
-  try {
-    const response = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user_message: message }),
-    });
-
-    const data = await response.json();
-    return data.reply;
-  } catch (err) {
-    console.log("Backend error:", err);
-    return "⚠️ Error: Could not reach the chatbot server.";
-  }
-};
-
-
-  const handleSend = async () => {
+  const handleSend = () => {
     if (!input.trim()) return;
-
-    // user's message
     const newChats = [...chats, { sender: 'user', text: input }];
-    setChats(newChats);
-
-    const userMessage = input;
-    setInput('');
-
-    // get backend reply
-    const botReply = await sendToBackend(userMessage);
-
-    // bot reply pushed as string (NOT array)
-    const updatedChats = [...newChats, { sender: 'bot', text: botReply }];
+    const botResponse = dummyResponses[Math.floor(Math.random() * dummyResponses.length)];
+    const updatedChats = [...newChats, { sender: 'bot', text: botResponse }];
     setChats(updatedChats);
+    setInput('');
 
     if (activeSession) {
       const updatedSessions = sessions.map((s) =>
-        s.id === activeSession
-          ? { ...s, messages: updatedChats, title: newChats[0]?.text || s.title }
-          : s
+        s.id === activeSession ? { ...s, messages: updatedChats, title: newChats[0]?.text || s.title } : s
       );
       setSessions(updatedSessions);
       saveSessions(updatedSessions);
@@ -119,15 +94,11 @@ const sendToBackend = async (message) => {
   };
 
   const renderMessage = ({ item }) => {
-    if (item.sender === 'user')
-      return (
-        <View style={styles.userMsg}><Text style={styles.userText}>{item.text}</Text></View>
-      );
-
+    if (item.sender === 'user') return (
+      <View style={styles.userMsg}><Text style={styles.userText}>{item.text}</Text></View>
+    );
     return (
-      <View style={styles.botMsg}>
-        <Text style={styles.botText}>{item.text}</Text>
-      </View>
+      <View style={styles.botMsg}>{item.text.map((line, i) => <Text key={i} style={styles.botText}>{line}</Text>)}</View>
     );
   };
 
@@ -172,7 +143,7 @@ const sendToBackend = async (message) => {
       <View style={styles.chatContainer}>
         <View style={styles.chatTopRow}>
           <Text style={styles.title}>Let's Talk!</Text>
-          <TouchableOpacity style={styles.therapistBtn}>
+          <TouchableOpacity style={styles.therapistBtn} onPress={() => console.log('Talk to my therapist')}>
             <Text style={styles.therapistBtnText}>Talk to My Therapist</Text>
           </TouchableOpacity>
         </View>
@@ -189,7 +160,7 @@ const sendToBackend = async (message) => {
             style={styles.input}
             placeholder="Type your message..."
             value={input}
-            onChangeText={(t) => setInput(t)}
+            onChangeText={setInput}
           />
           <TouchableOpacity style={styles.sendBtn} onPress={handleSend}>
             <Text style={styles.sendText}>Send</Text>
@@ -255,3 +226,5 @@ const styles = StyleSheet.create({
   modalCancel: { marginTop: 10, paddingVertical: 12, backgroundColor: '#dcdde1', borderRadius: 6 },
   modalCancelText: { textAlign: 'center', fontWeight: 'bold', fontSize: 16 },
 });
+
+

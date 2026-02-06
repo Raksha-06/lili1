@@ -108,7 +108,7 @@ const SectionOne = () => {
         router.push('/pages/dairy1');
         break;
       case 'Talk to Therapist':
-        router.push('/therapist');
+        router.push('/(tabs)/pages/therapistHome');
         break;
       default:
         alert(`Clicked ${feature}`);
