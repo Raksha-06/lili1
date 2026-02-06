@@ -1,0 +1,12 @@
+export const colors = {
+  primaryCoral: "#B77466",
+  secondaryCoral: "#E2B59A",
+  softCream: "#F3E2C1",
+  warmCream: "#F0D9B5",
+  softBrown: "#7D6C58",
+  darkBrown: "#5A4938",
+  accentBrown: "#8B4B3E",
+  reframeDark: "#713D32",
+  progressFill: "#B77466",
+  progressBackground: "#D3A88C",
+};
